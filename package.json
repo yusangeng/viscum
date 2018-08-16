@@ -1,7 +1,7 @@
 {
-  "name": "benny",
+  "name": "viscum",
   "version": "1.0.0",
-  "description": "A micro framework for simple component.",
+  "description": "A micro data-drive FE framework for simple component.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
