@@ -1,0 +1,34 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "browsers": ["last 2 versions", "ie >= 10"]
+        },
+        "debug": true
+      }
+    ]
+  ],
+  "plugins": [
+    "transform-class-properties",
+    "transform-decorators-legacy",
+
+    [
+      "transform-react-jsx",
+      {
+        "pragma": "Widget.createElement"
+      }
+    ],
+
+    [
+      "transform-runtime",
+      {
+        "helpers": true,
+        "polyfill": true,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+      }
+    ]
+  ]
+}
