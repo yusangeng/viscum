@@ -1,6 +1,6 @@
 {
   "name": "viscum",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A micro data-drive FE framework for simple component.",
   "main": "index.js",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yusangeng/benny.git"
+    "url": "https://github.com/yusangeng/viscum.git"
   },
   "keywords": [
     "framework"
@@ -19,9 +19,9 @@
   "author": "Y3G",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/yusangeng/benny/issues"
+    "url": "https://github.com/yusangeng/viscum/issues"
   },
-  "homepage": "https://github.com/yusangeng/benny#readme",
+  "homepage": "https://github.com/yusangeng/viscum#readme",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",
