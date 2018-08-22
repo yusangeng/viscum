@@ -1,19 +1,20 @@
-import { TEXT_TAG_NAME } from './const'
+import { TEXT_TAG_NAME, VID_ATTR_NAME } from './const'
 
-export default function createDOMNode (data) {
-  if (!data) {
+export default function createDOMNode (vdom) {
+  if (!vdom) {
     return document.createElement('noscript')
   }
 
-  const { props, tag, children } = data
-  let node = null
+  const { tag: vdomTag, props, children, vid } = vdom
 
-  if (tag === TEXT_TAG_NAME) {
-    node = document.createTextNode(props.text)
-    return node
+  if (vdomTag === TEXT_TAG_NAME) {
+    // 文字节点
+    return document.createTextNode(props.text)
   }
 
-  node = document.createElement(tag)
+  let node = document.createElement(vdomTag)
+
+  node.setAttribute(VID_ATTR_NAME, vid)
 
   Object.keys(props).forEach(key => {
     const attrKey = ('' + key).toLowerCase()

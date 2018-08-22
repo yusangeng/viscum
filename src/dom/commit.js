@@ -3,6 +3,7 @@ import patchToDOM from './patchDOM'
 
 export default function commit (el, vdom) {
   const root = el.firstElementChild
+
   if (!root) {
     el.appendChild(createDOMNode(vdom))
     return
@@ -13,5 +14,6 @@ export default function commit (el, vdom) {
     el.appendChild(createDOMNode(vdom))
     return
   }
+
   patchToDOM(root, vdom)
 }

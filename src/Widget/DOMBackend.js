@@ -24,6 +24,10 @@ export default superclass => class DOMBackend extends superclass {
     return this.delegator_
   }
 
+  get parentDelegator () {
+    return this.parentDelegator_
+  }
+
   get mounted () {
     return this.mounted_
   }
@@ -34,10 +38,13 @@ export default superclass => class DOMBackend extends superclass {
     this.listenerOffs_ = []
     this.mounted_ = false
     this.el_ = null
+    this.parentDelegator_ = null
   }
 
   dispose () {
     this.unmount()
+
+    delete this.parentDelegator_
 
     if (this.delegator) {
       this.delegator.dispose()
@@ -61,7 +68,7 @@ export default superclass => class DOMBackend extends superclass {
       return
     }
 
-    const vdom = this.render()
+    const vdom = this.renderTopLevelVDOM()
     const { shareMode } = this
     let wrap
 
@@ -75,21 +82,41 @@ export default superclass => class DOMBackend extends superclass {
     commit(wrap, vdom)
 
     if (shareMode) {
-      this.el.appendChild(wrap)
+      el.appendChild(wrap)
     }
 
     this.wrap_ = wrap
     this.el_ = el
 
     this.addDecoratedEventListeners()
+
+    if (!this.delegator) {
+      // 如果一个用装饰器声明的回调都没有, 则在这里创建事件委托
+      this.delegator_ = new MyDelegate()
+      this.delegator.initDelegate(this.wrap)
+    }
+
+    Object.keys(this.subWidgets).forEach(vid => {
+      const widget = this.subWidget(vid)
+
+      widget.setParentDelegator(this.delegator)
+      widget.addDecoratedEventListeners()
+    })
+
     this.mounted_ = true
     this.afterMount()
   }
 
+  @undisposed
   unmount () {
     const { wrap, el } = this
 
     this.beforeUnmount()
+
+    Object.keys(this.subWidgets).forEach(vid => {
+      const widget = this.subWidget(vid)
+      widget.removeDecoratedEventListeners()
+    })
     this.removeDecoratedEventListeners()
 
     if (this.shareMode) {
@@ -103,12 +130,19 @@ export default superclass => class DOMBackend extends superclass {
 
   @undisposed
   on$ (type, sel, callback) {
-    if (!this.delegator) {
-      this.delegator_ = new MyDelegate()
+    const { delegator, parentDelegator } = this
+    let d = null
+
+    if (!delegator && !parentDelegator) {
+      d = this.delegator_ = new MyDelegate()
       this.delegator.initDelegate(this.wrap)
+    } else if (delegator) {
+      d = delegator
+    } else if (parentDelegator) {
+      d = parentDelegator
     }
 
-    return this.delegator.on$(type, sel, callback)
+    return d.on$(type, sel, callback)
   }
 
   addDecoratedEventListeners () {
@@ -127,6 +161,10 @@ export default superclass => class DOMBackend extends superclass {
   removeDecoratedEventListeners () {
     this.listenerOffs_.forEach(el => el())
     this.listenerOffs_ = []
+  }
+
+  setParentDelegator (delegator) {
+    this.parentDelegator_ = delegator
   }
 
   commit (vdom) {

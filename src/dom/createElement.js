@@ -1,4 +1,5 @@
 import isString from 'lodash/isString'
+import isNumber from 'lodash/isNumber'
 import isFunction from 'lodash/isFunction'
 import { TEXT_TAG_NAME } from './const'
 
@@ -25,7 +26,7 @@ export default function createElement (tag, props, ...children) {
     tag: isString(tag) ? tag.toUpperCase() : tag,
     props: props || {},
     children: cs.map(child => {
-      if (typeof child === 'string') {
+      if (isString(child) || isNumber(child)) {
         return {
           // 文本节点
           tag: TEXT_TAG_NAME,

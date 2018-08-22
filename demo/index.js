@@ -2,30 +2,83 @@ import { Widget } from '../src'
 
 const { on$ } = Widget
 
-class Button extends Widget {
+class ButtonCore extends Widget {
   @on$('click', '.btn')
   onClick () {
-    alert('foobar')
+    console.log('clicked!')
   }
 
   render () {
-    return <div class='btn-wrap'>
-      <button class='btn'>{this.data.text}</button>
+    return <button class='btn'>{this.children}</button>
+  }
+}
+
+class ButtonImpl extends Widget {
+  render () {
+    return <ButtonCore>{this.children}</ButtonCore>
+  }
+}
+
+class Button extends Widget {
+  render () {
+    return <ButtonImpl>{this.data.text}</ButtonImpl>
+  }
+}
+
+class App extends Widget {
+  get defaultData () {
+    return {
+      n: 1
+    }
+  }
+
+  render () {
+    return <div class='app-wrap'>
+      {
+        (n => {
+          const arr = []
+          for (let i = 0; i < n; ++i) {
+            arr.push(<Button text={i} />)
+          }
+          return arr
+        })(this.data.n)
+      }
     </div>
   }
 }
 
-const btn = new Button({
-  data: {
-    text: 'Foo'
-  }
+const app = new App({
+  shareMode: true
 })
 
-btn.mount('#app')
+app.mount('#app')
 
 setTimeout(_ => {
-  btn.update({
-    text: 'Bar'
+  app.update({
+    n: 10
   })
-}, 1000)
+}, 3000)
 
+setTimeout(_ => {
+  app.update({
+    n: 5
+  })
+}, 6000)
+
+const app2 = new App({
+  shareMode: true
+})
+
+app2.mount('#app')
+
+setTimeout(_ => {
+  app2.update({
+    n: 10000
+  })
+}, 3000)
+
+setTimeout(_ => {
+  app2.update({
+    n: 5000
+  })
+}, 6000)
