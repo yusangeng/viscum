@@ -1,6 +1,5 @@
 import isUndefined from 'lodash/isUndefined'
 import createDOMNode from './createDOMNode'
-import mapProps from './mapProps'
 import { TEXT_TAG_NAME, DOMCONTAINER_ATTR_NAME, VID_ATTR_NAME } from './const'
 
 const { keys } = Object
@@ -28,8 +27,7 @@ function patchDOMText (el, vdom) {
 
 function patchDOMElement (el, vdom) {
   const attrs = Array.prototype.slice.call(el.attributes)
-  const { props: inputProps } = vdom
-  const props = mapProps(inputProps)
+  const { props } = vdom
 
   attrs.forEach(attr => {
     // 注意, DOM属性是不分大小写的

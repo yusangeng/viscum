@@ -4,11 +4,16 @@ import isNumber from 'lodash/isNumber'
 
 const { keys } = Object
 
-export default function mapProps (props) {
+export default function transformVDOMProps (vdom) {
+  vdom.props = transformProps(vdom.props)
+  vdom.children.forEach(child => transformVDOMProps(child))
+}
+
+function transformProps (props) {
   const ret = {}
   const names = keys(props)
 
-  props = mapStyle(mapClassName(props))
+  props = transformStyle(transformClassName(props))
 
   names.forEach(name => {
     ret[('' + name).toLowerCase()] = props[name]
@@ -17,12 +22,11 @@ export default function mapProps (props) {
   return ret
 }
 
-function mapClassName (props) {
-  const { className } = props
-  let cls = className || props['class']
+function transformClassName (props) {
+  let { className: cls } = props
 
   if (isArray(cls)) {
-    cls = cls.join(' ')
+    cls = cls.map(el => isArray(el) ? el.join(' ') : el).join(' ')
   } else if (isPlainObject(cls)) {
     cls = keys(cls).map(c => {
       if (cls[c]) {
@@ -33,21 +37,19 @@ function mapClassName (props) {
     cls = '' + cls
   }
 
-  props['class'] = cls
-  props.className = null
-  delete props.className
+  props.className = cls
 
   return props
 }
 
-function mapStyle (props) {
+function transformStyle (props) {
   let { style } = props
 
   if (isPlainObject(style)) {
     style = keys(style).map(key => {
       let value = style[key]
 
-      if (isNumber(value)) {
+      if (isNumber(value) && key !== 'z-index') {
         value = value + 'px'
       } else {
         value = '' + value

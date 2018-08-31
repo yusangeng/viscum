@@ -5,7 +5,7 @@ export default function createDOMNode (vdom) {
     return document.createElement('noscript')
   }
 
-  const { tag: vdomTag, props, children, vid } = vdom
+  let { tag: vdomTag, props, children, vid } = vdom
 
   if (vdomTag === TEXT_TAG_NAME) {
     // 文字节点
@@ -17,8 +17,12 @@ export default function createDOMNode (vdom) {
   node.setAttribute(VID_ATTR_NAME, vid)
 
   Object.keys(props).forEach(key => {
-    const attrKey = ('' + key).toLowerCase()
+    let attrKey = ('' + key).toLowerCase()
     const value = props[key]
+
+    if (attrKey === 'classname') {
+      attrKey = 'class'
+    }
 
     node.setAttribute(attrKey, value)
   })
