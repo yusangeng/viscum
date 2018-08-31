@@ -13,4 +13,3 @@ export default function addVID (vdom, id = null) {
 
   children.forEach(child => addVID(child, `${id}.${childId++}`))
 }
-
