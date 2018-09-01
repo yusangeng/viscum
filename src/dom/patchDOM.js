@@ -83,6 +83,10 @@ function dealWithRemovableAttr (el, name) {
 }
 
 function dealWithDifferentAttr (el, name, newValue, currentValue) {
+  if (name === 'classname') {
+    name = 'class'
+  }
+
   el.setAttribute(name, newValue)
 }
 
