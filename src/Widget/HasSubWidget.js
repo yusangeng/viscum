@@ -1,6 +1,10 @@
+import { SUBWIDGET_DATA_NAME } from '../dom/const'
+
+const { values } = Object
+
 export default superclass => class HasSubWidget extends superclass {
   initHasSubWidget () {
-    this.subWidgets_ = []
+    this.subWidgets_ = {}
     this.usingVID_ = []
   }
 
@@ -11,10 +15,19 @@ export default superclass => class HasSubWidget extends superclass {
     })
 
     delete this.subWidgets_
+    super.dispose()
   }
 
   subWidget (vid) {
     return this.subWidgets_[vid]
+  }
+
+  widgetByName (name) {
+    return values(this.subWidgets_).find(el => el[SUBWIDGET_DATA_NAME] === name)
+  }
+
+  $ (name) {
+    return this.widgetByName(name)
   }
 
   get subWidgets () {
@@ -30,10 +43,11 @@ export default superclass => class HasSubWidget extends superclass {
   }
 
   removeSubWidget (vid) {
-    const prev = this.subWidgets_[vid]
+    const widget = this.subWidgets_[vid]
 
-    if (prev) prev.dispose()
     delete this.subWidgets_[vid]
+
+    return widget
   }
 
   startUpdateSubWidgets () {
@@ -44,7 +58,7 @@ export default superclass => class HasSubWidget extends superclass {
 
     Object.keys(widgets).forEach(vid => {
       if (!this.usingVID_.includes(vid)) {
-        this.removeSubWidget(vid)
+        this.removeSubWidget(vid).dispose()
       }
     })
 

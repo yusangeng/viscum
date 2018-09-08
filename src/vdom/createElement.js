@@ -1,7 +1,7 @@
 import isString from 'lodash/isString'
 import isNumber from 'lodash/isNumber'
 import isFunction from 'lodash/isFunction'
-import { TEXT_TAG_NAME } from './const'
+import { TEXT_TAG_NAME } from '../dom/const'
 
 const { isArray } = Array
 

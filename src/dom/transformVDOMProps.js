@@ -42,6 +42,8 @@ function transformClassName (props) {
   return props
 }
 
+const specialKeys = ['opacity', 'z-index']
+
 function transformStyle (props) {
   let { style } = props
 
@@ -49,7 +51,7 @@ function transformStyle (props) {
     style = keys(style).map(key => {
       let value = style[key]
 
-      if (isNumber(value) && key !== 'z-index') {
+      if (isNumber(value) && !specialKeys.includes(key)) {
         value = value + 'px'
       } else {
         value = '' + value

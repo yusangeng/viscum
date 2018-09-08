@@ -1,7 +1,7 @@
 let currentRootVID = 1
 
 export default function addVID (vdom, id = null) {
-  if (vdom.vid) {
+  if (!vdom || vdom.vid) {
     return
   }
 

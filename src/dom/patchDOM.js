@@ -70,7 +70,22 @@ function patchDOMElement (el, vdom) {
     }
   })
 
-  domChildrenBackup.forEach(child => el.removeChild(child))
+  updateChildren(el, domChildrenBackup, newDOMChildren)
+}
+
+// TODO: 待优化
+function updateChildren (el, domChildren, newDOMChildren) {
+  if (domChildren.length === newDOMChildren.length) {
+    const same = domChildren.every((el, index) => {
+      return newDOMChildren[index] === el
+    })
+
+    if (same) {
+      return
+    }
+  }
+
+  domChildren.forEach(child => el.removeChild(child))
   newDOMChildren.forEach(child => el.appendChild(child))
 }
 

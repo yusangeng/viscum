@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "es5": "babel ./src -d ./lib --source-maps inline",
+    "es5": "rm -rf ./lib && babel ./src -d ./lib --source-maps inline",
     "start": "webpack-dev-server --config ./webpack/develop.js --hot --inline",
     "prepublish": "npm run es5"
   },

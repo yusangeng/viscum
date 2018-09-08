@@ -2,6 +2,7 @@ const { assign } = Object
 const noop = _ => _
 
 const defaultHooks = {
+  afterDelegatorCreated: noop,
   afterMount: noop,
   beforeUnmount: noop,
   shouldUpdate: _ => true,
@@ -11,6 +12,10 @@ const defaultHooks = {
 export default superclass => class Hookable extends superclass {
   initHookable ({ hooks = {} }) {
     this.hooks_ = assign({}, defaultHooks, hooks)
+  }
+
+  afterDelegatorCreated (delegator) {
+    this.hooks_.afterDelegatorCreated.call(this, delegator)
   }
 
   afterMount () {

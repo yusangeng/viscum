@@ -12,6 +12,7 @@ export default superclass => class DOMBackend extends superclass {
     return this.wrap_
   }
 
+  // 在sharemode下，wrap和el不是同一个DOM element
   get el () {
     return this.el_
   }
@@ -68,7 +69,7 @@ export default superclass => class DOMBackend extends superclass {
       return
     }
 
-    const vdom = this.renderTopLevelVDOM()
+    const vdom = this.renderVDOM()
     const { shareMode } = this
     let wrap
 
@@ -78,7 +79,7 @@ export default superclass => class DOMBackend extends superclass {
       wrap = el
     }
 
-    wrap.classList.add('benny-widget-wrap')
+    wrap.classList.add('viscum-widget-wrap')
     commit(wrap, vdom)
 
     if (shareMode) {
@@ -88,13 +89,13 @@ export default superclass => class DOMBackend extends superclass {
     this.wrap_ = wrap
     this.el_ = el
 
-    this.addDecoratedEventListeners()
-
     if (!this.delegator) {
-      // 如果一个用装饰器声明的回调都没有, 则在这里创建事件委托
       this.delegator_ = new MyDelegate()
       this.delegator.initDelegate(this.wrap)
+      this.afterDelegatorCreated(this.delegator)
     }
+
+    this.addDecoratedEventListeners()
 
     Object.keys(this.subWidgets).forEach(vid => {
       const widget = this.subWidget(vid)
@@ -119,7 +120,7 @@ export default superclass => class DOMBackend extends superclass {
     })
     this.removeDecoratedEventListeners()
 
-    if (this.shareMode) {
+    if (this.shareMode && el && wrap) {
       el.removeChild(wrap)
     }
 
@@ -169,7 +170,35 @@ export default superclass => class DOMBackend extends superclass {
 
   commit (vdom) {
     if (this.wrap) {
+      // 顶层组件渲染
       commit(this.wrap, vdom)
+      return
     }
+
+
+    // 子组件渲染
+    let { parentWidget } = this
+
+    if (!parentWidget) {
+      throw new Error(`Parent widget does NOT exists.`)
+    }
+
+    let { wrap } = parentWidget
+
+    while (!wrap) {
+      parentWidget = parentWidget.parentWidget
+    }
+
+    if (!wrap) {
+      throw new Error('Can NOT find the DOM element which top level widget mounted to.')
+    }
+
+    const el = wrap.querySelector(`[data-viscum-id="${this.vid}"]`)
+
+    if (!el) {
+      throw new Error('Can NOT find the DOM element which current widget mounted to.')
+    }
+
+    commit(el, vdom, { toSelf: true })
   }
 }

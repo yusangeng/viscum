@@ -1,8 +1,22 @@
 import isFunction from 'lodash/isFunction'
 import undisposed from 'litchy/lib/decorator/undisposed'
-import h from '../vdom/h'
+import vdom from '../vdom/vdom'
 
 const { assign } = Object
+
+function polyfillNull (vdom) {
+  if (vdom === null) {
+    return {
+      tag: 'NOSCRIPT',
+      props: {},
+      children: []
+    }
+  }
+
+  vdom.children = (vdom.children || []).map(child => polyfillNull(child))
+
+  return vdom
+}
 
 export default superclass => class Renderer extends superclass {
   get data () {
@@ -39,17 +53,17 @@ export default superclass => class Renderer extends superclass {
 
   @undisposed
   updateDOM () {
-    const vdom = this.renderTopLevelVDOM()
+    const vdom = this.renderVDOM()
     this.commit(vdom)
   }
 
-  renderTopLevelVDOM () {
-    return this.h(this.render())
-  }
+  @undisposed
+  renderVDOM () {
+    const rawVDOM = polyfillNull(this.render())
+    const retVDOM = vdom(rawVDOM, this.vid, this)
 
-  h (vdom) {
-    const retVDOM = h(vdom, this.rootVID_, this)
-    this.rootVID_ = vdom.vid
+    this.vid_ = retVDOM.vid
+
     return retVDOM
   }
 
