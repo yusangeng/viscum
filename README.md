@@ -1,6 +1,6 @@
 # Viscum
 
-A micro data-drive FE framework for simple component.
+A micro data-driven FE framework for simple component.
 
 ## Install
 
