@@ -1,8 +1,5 @@
-import isArray from 'lodash/isArray'
-import isPlainObject from 'lodash/isPlainObject'
-import isNumber from 'lodash/isNumber'
-
 const { keys } = Object
+const { isArray } = Array
 
 export default function transformVDOMProps (vdom) {
   vdom.props = transformProps(vdom.props)
@@ -27,7 +24,7 @@ function transformClassName (props) {
 
   if (isArray(cls)) {
     cls = cls.map(el => isArray(el) ? el.join(' ') : el).join(' ')
-  } else if (isPlainObject(cls)) {
+  } else if (typeof cls === 'object') {
     cls = keys(cls).map(c => {
       if (cls[c]) {
         return '' + c
@@ -47,11 +44,11 @@ const specialKeys = ['opacity', 'z-index']
 function transformStyle (props) {
   let { style } = props
 
-  if (isPlainObject(style)) {
+  if (typeof style === 'object') {
     style = keys(style).map(key => {
       let value = style[key]
 
-      if (isNumber(value) && !specialKeys.includes(key)) {
+      if (typeof value === 'number' && !specialKeys.includes(key)) {
         value = value + 'px'
       } else {
         value = '' + value

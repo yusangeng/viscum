@@ -1,4 +1,3 @@
-import isUndefined from 'lodash/isUndefined'
 import createDOMNode from './createDOMNode'
 import { TEXT_TAG_NAME, DOMCONTAINER_ATTR_NAME, VID_ATTR_NAME } from './const'
 
@@ -33,7 +32,7 @@ function patchDOMElement (el, vdom) {
     // 注意, DOM属性是不分大小写的
     const { name } = attr
 
-    if (isUndefined(props[name])) {
+    if (typeof props[name] === 'undefined') {
       dealWithRemovableAttr(el, name)
     }
   })

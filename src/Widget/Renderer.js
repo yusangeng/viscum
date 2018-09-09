@@ -1,4 +1,3 @@
-import isFunction from 'lodash/isFunction'
 import undisposed from 'litchy/lib/decorator/undisposed'
 import vdom from '../vdom/vdom'
 
@@ -28,8 +27,7 @@ export default superclass => class Renderer extends superclass {
   }
 
   initRenderer ({ initData = {} }) {
-    let myData = isFunction(initData) ? initData() : initData
-
+    let myData = typeof initData === 'function' ? initData() : initData
     this.data_ = assign({}, this.defaultData, myData)
   }
 

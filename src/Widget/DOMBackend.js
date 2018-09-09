@@ -1,7 +1,7 @@
 import mix from 'litchy/lib/mix'
 import Eventable from 'litchy/lib/Eventable'
 import undisposed from 'litchy/lib/decorator/undisposed'
-import Delegate from 'dodele'
+import Delegate from '../utils/Delegate'
 import commit from '../dom/commit'
 import selectorToElement from '../utils/selectorToElement'
 
@@ -175,7 +175,6 @@ export default superclass => class DOMBackend extends superclass {
       return
     }
 
-
     // 子组件渲染
     let { parentWidget } = this
 
@@ -187,6 +186,7 @@ export default superclass => class DOMBackend extends superclass {
 
     while (!wrap) {
       parentWidget = parentWidget.parentWidget
+      wrap = parentWidget.wrap
     }
 
     if (!wrap) {

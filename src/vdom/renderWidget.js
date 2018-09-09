@@ -1,5 +1,3 @@
-import isFunction from 'lodash/isFunction'
-import addVID from './addVID'
 import applyWidget from './applyWidget'
 import { SUBWIDGET_DATA_NAME } from '../dom/const'
 
@@ -10,7 +8,7 @@ export default function renderWidget (vdom, parentWidget) {
   const { tag: WidgetClass, props = {}, children = [], vid, parent } = vdom
   let outputVDOM = null
 
-  if (isFunction(WidgetClass)) {
+  if (typeof WidgetClass === 'function') {
     // 子组件
     // console.log(WidgetClass.name, parent ? parent.constructor.name : 'none',
     //   children.map(c => c.tag.name || c.tag),
@@ -37,9 +35,9 @@ export default function renderWidget (vdom, parentWidget) {
   return outputVDOM
 }
 
-function setParentToChildren(parent, children) {
+function setParentToChildren (parent, children) {
   children.forEach(child => {
-    if (isFunction(child.tag) && !child.parent) {
+    if ((typeof child.tag === 'function') && !child.parent) {
       child.parent = parent
     }
 
@@ -47,13 +45,13 @@ function setParentToChildren(parent, children) {
   })
 }
 
-function renderWidgetVDOM({ WidgetClass, props, children, vid, parentWidget }) {
+function renderWidgetVDOM ({ WidgetClass, props, children, vid, parentWidget }) {
   let realVID = `${vid}$`
   let instance = parentWidget.subWidget(vid)
 
   const __widget = props[SUBWIDGET_DATA_NAME]
-  const data =assign({}, props, {
-    [SUBWIDGET_DATA_NAME]: void 0,
+  const data = assign({}, props, {
+    [SUBWIDGET_DATA_NAME]: void 0
   })
 
   if (!instance) {

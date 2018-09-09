@@ -6,7 +6,7 @@
         "targets": {
           "browsers": ["last 2 versions", "ie >= 10"]
         },
-        "debug": true
+        "debug": false
       }
     ]
   ],
@@ -18,16 +18,6 @@
       "transform-react-jsx",
       {
         "pragma": "Widget.createElement"
-      }
-    ],
-
-    [
-      "transform-runtime",
-      {
-        "helpers": true,
-        "polyfill": true,
-        "regenerator": true,
-        "moduleName": "babel-runtime"
       }
     ]
   ]

@@ -28,7 +28,7 @@ function commitToChild (el, vdom) {
   patchToDOM(root, vdom)
 }
 
-function commitToSelf(el, vdom) {
+function commitToSelf (el, vdom) {
   if (el.tagName !== vdom.tag) {
     el.parentELement.replaceChild(el, createDOMNode(vdom))
     return

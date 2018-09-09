@@ -4,8 +4,6 @@
  * @author Y3G
  */
 
-import isString from 'lodash/isString'
-
 /**
  * 如果输入css选择器则输出第一个满足条件的节点, 如果输入节点则返回节点本身
  *
@@ -15,7 +13,7 @@ import isString from 'lodash/isString'
 export default function selectorToElement (sel) {
   let ret = sel
 
-  if (isString(sel)) {
+  if (typeof sel === 'string') {
     ret = document.querySelector(sel)
   }
 
