@@ -1,7 +1,7 @@
 {
   "name": "viscum",
   "version": "1.1.1",
-  "description": "A micro data-drive FE framework for simple component.",
+  "description": "A micro data-driven FE framework for simple component.",
   "main": "lib/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
