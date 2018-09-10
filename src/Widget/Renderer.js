@@ -34,7 +34,7 @@ export default superclass => class Renderer extends superclass {
   @undisposed
   update (data) {
     if (this.updateData(data)) {
-      this.updateDOM()
+      this.updateToBackend()
     }
   }
 
@@ -50,7 +50,7 @@ export default superclass => class Renderer extends superclass {
   }
 
   @undisposed
-  updateDOM () {
+  updateToBackend () {
     const vdom = this.renderVDOM()
     this.commit(vdom)
   }
