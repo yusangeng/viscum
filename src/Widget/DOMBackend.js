@@ -196,7 +196,8 @@ export default superclass => class DOMBackend extends superclass {
     const el = wrap.querySelector(`[data-viscum-id="${this.vid}"]`)
 
     if (!el) {
-      throw new Error('Can NOT find the DOM element which current widget mounted to.')
+      // throw new Error('Can NOT find the DOM element which current widget mounted to.')
+      return
     }
 
     commit(el, vdom, { toSelf: true })
