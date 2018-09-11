@@ -60,7 +60,9 @@ export default superclass => class Renderer extends superclass {
     const rawVDOM = polyfillNull(this.render())
     const retVDOM = vdom(rawVDOM, this.vid, this)
 
-    this.vid_ = retVDOM.vid
+    if (!this.vid_) {
+      this.vid_ = retVDOM.vid
+    }
 
     return retVDOM
   }
