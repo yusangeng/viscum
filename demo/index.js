@@ -1,27 +1,8 @@
 import { Widget } from '../src'
 
-const { on$ } = Widget
-
-class ButtonCore extends Widget {
-  @on$('click', '.btn')
-  onClick () {
-    console.log('clicked!')
-  }
-
-  render () {
-    return <button class='btn'>{this.children}</button>
-  }
-}
-
-class ButtonImpl extends Widget {
-  render () {
-    return <ButtonCore>{this.children}</ButtonCore>
-  }
-}
-
 class Button extends Widget {
   render () {
-    return <ButtonImpl>{this.data.text}</ButtonImpl>
+    return <button>{this.data.text}</button>
   }
 }
 
@@ -38,7 +19,7 @@ class App extends Widget {
         (n => {
           const arr = []
           for (let i = 0; i < n; ++i) {
-            arr.push(<Button text={i} />)
+            arr.push(<Button text={this.data.text} />)
           }
           return arr
         })(this.data.n)
@@ -47,38 +28,22 @@ class App extends Widget {
   }
 }
 
-const app = new App({
-  shareMode: true
+const n = 10000
+const app = window.demo = new App({
+  data: { n, text: '1234' }
 })
 
-app.mount('#app')
+function t (fn) {
+  setTimeout(_ => {
+    const time = Date.now()
+    fn()
+    console.log('用时: ' + (Date.now() - time))
+  }, 1000)
+}
 
-setTimeout(_ => {
-  app.update({
-    n: 10
-  })
-}, 3000)
+t(_ => app.mount('#app'))
 
-setTimeout(_ => {
-  app.update({
-    n: 5
-  })
-}, 6000)
-
-const app2 = new App({
-  shareMode: true
+t(_ => {
+  window.updating = 1
+  app.update({ text: '5678' })
 })
-
-app2.mount('#app')
-
-setTimeout(_ => {
-  app2.update({
-    n: 10000
-  })
-}, 3000)
-
-setTimeout(_ => {
-  app2.update({
-    n: 5000
-  })
-}, 6000)
