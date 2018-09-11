@@ -5,7 +5,7 @@ const { values } = Object
 export default superclass => class HasSubWidget extends superclass {
   initHasSubWidget () {
     this.subWidgets_ = {}
-    this.usingVID_ = []
+    this.usingVIDs_ = {}
   }
 
   dispose () {
@@ -57,17 +57,17 @@ export default superclass => class HasSubWidget extends superclass {
     const widgets = this.subWidgets
 
     Object.keys(widgets).forEach(vid => {
-      if (!this.usingVID_.includes(vid)) {
+      if (!this.usingVIDs_[vid]) {
         this.removeSubWidget(vid).dispose()
       }
     })
 
     // console.log(this.subWidgets)
 
-    this.usingVID_ = []
+    this.usingVIDs_ = {}
   }
 
   addUsingVID (vid) {
-    this.usingVID_.push(vid)
+    this.usingVIDs_[vid] = 1
   }
 }
