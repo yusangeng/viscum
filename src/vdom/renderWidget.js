@@ -47,7 +47,7 @@ function setParentToChildren (parent, children) {
 
 function renderWidgetVDOM ({ WidgetClass, props, children, vid, parentWidget }) {
   let realVID = `${vid}$`
-  let instance = parentWidget.subWidget(vid)
+  let instance = parentWidget.subWidget(realVID)
 
   const __widget = props[SUBWIDGET_DATA_NAME]
   const data = assign({}, props, {
