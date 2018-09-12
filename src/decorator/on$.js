@@ -4,7 +4,7 @@ export default function on$ (type, sel) {
     if (typeOfSel === 'string') {
       addDecoratedDOMListener(target, descriptor, type, sel)
     } else if (typeOfSel === 'undefined') {
-      addDecoratedWidgetListener(target, descriptor)
+      addDecoratedWidgetListener(target, descriptor, type)
     } else {
       console.warn(`Bad selector: ${sel}.`)
     }
