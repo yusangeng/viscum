@@ -1,4 +1,4 @@
-import Widget from './Widget'
+import Widget, { createWidgetClass } from './Widget'
 import createElement from './vdom/createElement'
 import on$ from './decorator/on$'
 
@@ -14,6 +14,7 @@ export const callback = on$
 
 export {
   Widget,
+  createWidgetClass,
   createElement,
   on$,
   on

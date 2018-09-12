@@ -8,7 +8,7 @@ import WidgetEvent from './WidgetEvent'
 
 const { assign } = Object
 
-const createWidgetClass = (Backend = DOMBackend) => class Widget extends
+export const createWidgetClass = (Backend = DOMBackend) => class Widget extends
   mix(Eventable).with(Backend, Hookable, Renderer, HasSubWidget, WidgetEvent) {
     get children () {
       return this.children_
