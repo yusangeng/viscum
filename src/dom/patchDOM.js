@@ -1,5 +1,5 @@
 import createDOMNode from './createDOMNode'
-import { TEXT_TAG_NAME, DOMCONTAINER_ATTR_NAME, VID_ATTR_NAME } from './const'
+import { TEXT_TAG_NAME, DOMCONTAINER_ATTR_NAME, VID_ATTR_NAME, ATTR_CACHE_NAME } from './const'
 
 const { keys } = Object
 
@@ -16,33 +16,57 @@ export default function patchDOM (el, vdom) {
 }
 
 function patchDOMText (el, vdom) {
-  const text = el.nodeValue
+  let cache = el[ATTR_CACHE_NAME]
+
+  if (!cache) {
+    cache = el[ATTR_CACHE_NAME] = {
+      text: el.nodeValue
+    }
+  }
+
+  const text = cache.text
   const newText = vdom.props.text
 
   if (text !== newText) {
     el.nodeValue = newText
+    cache.text = newText
   }
 }
 
 function patchDOMElement (el, vdom) {
-  const attrs = Array.prototype.slice.call(el.attributes)
+  let cache = el[ATTR_CACHE_NAME]
+
+  if (!cache) {
+    const attrs = Array.prototype.slice.call(el.attributes)
+
+    cache = el[ATTR_CACHE_NAME] = attrs.reduce((prev, item) => {
+      prev[item.name] = item.value
+    }, {})
+  }
+
   const { props } = vdom
+  const attrs = keys(cache).map(key => {
+    return {
+      name: key,
+      value: cache[key]
+    }
+  })
 
   attrs.forEach(attr => {
     // 注意, DOM属性是不分大小写的
     const { name } = attr
 
-    if (typeof props[name] === 'undefined') {
-      dealWithRemovableAttr(el, name)
+    if (typeof props[name] === 'undefiend') {
+      dealWithRemovableAttr(el, name, cache)
     }
   })
 
   keys(props).forEach(key => {
     const value = props[key]
-    const currentDOMValue = el.getAttribute(key)
+    const currentDOMValue = attrs[key]
 
     if (value !== currentDOMValue) {
-      dealWithDifferentAttr(el, key, value, currentDOMValue)
+      dealWithDifferentAttr(el, key, value, currentDOMValue, cache)
     }
   })
 
@@ -88,20 +112,20 @@ function updateChildren (el, domChildren, newDOMChildren) {
   newDOMChildren.forEach(child => el.appendChild(child))
 }
 
-function dealWithRemovableAttr (el, name) {
+function dealWithRemovableAttr (el, name, cache) {
   if (name === VID_ATTR_NAME) {
     return
   }
 
   el.removeAttribute(name)
+  delete cache[name]
 }
 
-function dealWithDifferentAttr (el, name, newValue, currentValue) {
-  if (name === 'classname') {
-    name = 'class'
-  }
+function dealWithDifferentAttr (el, name, newValue, currentValue, cache) {
+  const attrName = name === 'classname' ? 'class' : name
 
-  el.setAttribute(name, newValue)
+  el.setAttribute(attrName, newValue)
+  cache[name] = newValue
 }
 
 function getDOMNodeTagName (node) {
