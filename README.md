@@ -29,16 +29,24 @@ class Button extends Widget {
   }
 }
 
-const btn = new Button({
+class App extends Widget {
+  render () {
+    return <div>
+      <Button text={this.data.buttonText} />
+    </div>
+  }
+}
+
+const app = new App({
   data: {
-    text: 'Foo'
+    buttonText: 'Foo'
   }
 })
 
-btn.mount('#app')
+app.mount('#app')
 
 setTimeout(_ => {
-  btn.update({
+  app.update({
     text: 'Bar'
   })
 }, 1000)
