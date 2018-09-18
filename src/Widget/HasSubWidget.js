@@ -1,6 +1,6 @@
 import { SUBWIDGET_DATA_NAME } from '../dom/const'
 
-const { values } = Object
+const { keys, values } = Object
 
 export default superclass => class HasSubWidget extends superclass {
   initHasSubWidget () {
@@ -9,7 +9,7 @@ export default superclass => class HasSubWidget extends superclass {
   }
 
   dispose () {
-    Object.keys(this.subWidgets_).forEach(vid => {
+    keys(this.subWidgets_).forEach(vid => {
       const widget = this.subWidgets_[vid]
       widget.dispose()
     })
@@ -56,7 +56,7 @@ export default superclass => class HasSubWidget extends superclass {
   stopUpdateSubWidgets () {
     const widgets = this.subWidgets
 
-    Object.keys(widgets).forEach(vid => {
+    keys(widgets).forEach(vid => {
       if (!this.usingVIDs_[vid]) {
         this.removeSubWidget(vid).dispose()
       }

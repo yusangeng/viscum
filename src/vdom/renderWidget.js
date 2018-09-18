@@ -47,7 +47,7 @@ function setParentToChildren (parent, children) {
 
 function renderWidgetVDOM ({ WidgetClass, props, children, vid, parentWidget }) {
   let realVID = `${vid}$`
-  let instance = parentWidget.subWidget(realVID)
+  let instance = parentWidget ? parentWidget.subWidget(realVID) : null
 
   const __widget = props[SUBWIDGET_DATA_NAME]
   const data = assign({}, props, {
@@ -63,10 +63,15 @@ function renderWidgetVDOM ({ WidgetClass, props, children, vid, parentWidget }) 
     })
 
     instance[SUBWIDGET_DATA_NAME] = __widget
-    parentWidget.addSubWidget(realVID, instance)
-    parentWidget.addUsingVID(realVID)
+
+    if (parentWidget) {
+      parentWidget.addSubWidget(realVID, instance)
+      parentWidget.addUsingVID(realVID)
+    }
   } else if (instance.constructor !== WidgetClass) {
-    parentWidget.removeSubWidget(vid).dispose()
+    if (parentWidget) {
+      parentWidget.removeSubWidget(vid).dispose()
+    }
 
     instance = new WidgetClass({
       parent: parentWidget,
@@ -76,12 +81,18 @@ function renderWidgetVDOM ({ WidgetClass, props, children, vid, parentWidget }) 
     })
 
     instance[SUBWIDGET_DATA_NAME] = __widget
-    parentWidget.addSubWidget(realVID, instance)
-    parentWidget.addUsingVID(realVID)
+
+    if (parentWidget) {
+      parentWidget.addSubWidget(realVID, instance)
+      parentWidget.addUsingVID(realVID)
+    }
   } else {
     instance.children = children
     instance.updateData(props)
-    parentWidget.addUsingVID(realVID)
+
+    if (parentWidget) {
+      parentWidget.addUsingVID(realVID)
+    }
   }
 
   return instance.renderVDOM()
