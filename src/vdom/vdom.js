@@ -1,3 +1,9 @@
+/**
+ * VDOM处理函数
+ *
+ * @author Y3G
+ */
+
 import applyWidget from './applyWidget'
 import addVID from './addVID'
 

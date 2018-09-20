@@ -1,3 +1,9 @@
+/**
+ * 入口文件
+ *
+ * @author Y3G
+ */
+
 import Widget, { createWidgetClass } from './Widget'
 import createElement from './vdom/createElement'
 import on$ from './decorator/on$'

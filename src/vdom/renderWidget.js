@@ -1,3 +1,9 @@
+/**
+ * VDOM组件展开
+ *
+ * @author Y3G
+ */
+
 import applyWidget from './applyWidget'
 import { SUBWIDGET_DATA_NAME } from '../dom/const'
 

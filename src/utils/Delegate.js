@@ -1,8 +1,10 @@
 /**
- * 事件代理(拷贝自dodele)
+ * DOM事件代理
  *
  * @author Y3G
  */
+
+import Eventable from "./Eventable"
 
 const { keys } = Object
 const capture = type => ['scroll', 'focus', 'blur'].includes(type)
@@ -25,7 +27,7 @@ function createFilter (sel) {
   }
 }
 
-export default superclass => class extends superclass {
+export default class Delegate extends Eventable {
   get el () {
     return this.el_
   }

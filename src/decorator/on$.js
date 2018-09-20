@@ -1,3 +1,9 @@
+/**
+ * 事件监听装饰器
+ *
+ * @author Y3G
+ */
+
 export default function on$ (type, sel) {
   return function on$ (target, key, descriptor) {
     const typeOfSel = typeof sel

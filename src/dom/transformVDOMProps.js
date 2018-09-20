@@ -1,3 +1,9 @@
+/**
+ * 转换VDOM属性到DOM属性
+ *
+ * @author Y3G
+ */
+
 const { keys } = Object
 const { isArray } = Array
 

@@ -1,7 +1,13 @@
-import mix from 'litchy/lib/mix'
-import Eventable from 'litchy/lib/Eventable'
+/**
+ * 组件
+ *
+ * @author Y3G
+ */
+
+import mix from 'mix-with'
+import Eventable from '../utils/Eventable'
 import DOMBackend from './DOMBackend'
-import Hookable from './Hookable'
+import Lifecycle from './Lifecycle'
 import Renderer from './Renderer'
 import HasSubWidget from './HasSubWidget'
 import WidgetEvent from './WidgetEvent'
@@ -9,7 +15,7 @@ import WidgetEvent from './WidgetEvent'
 const { assign } = Object
 
 export const createWidgetClass = (Backend = DOMBackend) => class Widget extends
-  mix(Eventable).with(Backend, Hookable, Renderer, HasSubWidget, WidgetEvent) {
+  mix(Eventable).with(Backend, Lifecycle, Renderer, HasSubWidget, WidgetEvent) {
     get children () {
       return this.children_
     }
@@ -38,7 +44,6 @@ export const createWidgetClass = (Backend = DOMBackend) => class Widget extends
       const { shareMode, hooks, data, parent, children, vid } = opt
 
       this.initBackend({ shareMode })
-      this.initHookable({ hooks })
       this.initRenderer({ initData: data })
       this.initHasSubWidget()
       this.initWidgetEvent()

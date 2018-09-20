@@ -1,3 +1,9 @@
+/**
+ * 组件事件冒泡支持
+ *
+ * @author Y3G
+ */
+
 export default superclass => class extends superclass {
   initWidgetEvent () {
     const dl = this.constructor.prototype.__decorated_widget_listeners__

@@ -1,3 +1,9 @@
+/**
+ * 创建DOM节点
+ *
+ * @author Y3G
+ */
+
 import { TEXT_TAG_NAME, VID_ATTR_NAME, ATTR_CACHE_NAME } from './const'
 
 export default function createDOMNode (vdom) {

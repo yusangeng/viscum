@@ -1,13 +1,11 @@
 /* global describe it */
 
 import chai from 'chai'
-import Eventable from 'litchy/lib/Eventable'
-import mix from 'litchy/lib/mix'
 import Delegate from '../../src/utils/Delegate'
 
 chai.should()
 
-class Target extends mix(Eventable).with(Delegate) {
+class Target extends Delegate {
   listen () {
     this.on$('click', 'body', this.onClick.bind(this))
   }

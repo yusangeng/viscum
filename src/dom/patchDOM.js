@@ -1,3 +1,9 @@
+/**
+ * 更新DOM
+ *
+ * @author Y3G
+ */
+
 import createDOMNode from './createDOMNode'
 import { TEXT_TAG_NAME, DOMCONTAINER_ATTR_NAME, VID_ATTR_NAME, ATTR_CACHE_NAME } from './const'
 

@@ -1,3 +1,9 @@
+/**
+ * 子组件管理
+ *
+ * @author Y3G
+ */
+
 import { SUBWIDGET_DATA_NAME } from '../dom/const'
 
 const { keys, values } = Object

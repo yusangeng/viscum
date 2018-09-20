@@ -1,3 +1,9 @@
+/**
+ * VDOM提交
+ *
+ * @author Y3G
+ */
+
 import createDOMNode from './createDOMNode'
 import patchToDOM from './patchDOM'
 import transformVDOMProps from './transformVDOMProps'

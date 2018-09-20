@@ -56,6 +56,6 @@
     "webpack-dev-server": "^2.9.7"
   },
   "dependencies": {
-    "litchy": "^2.0.4"
+    "mix-with": "^1.0.2"
   }
 }

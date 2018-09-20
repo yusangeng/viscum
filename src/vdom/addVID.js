@@ -1,3 +1,9 @@
+/**
+ * 添加VID
+ *
+ * @author Y3G
+ */
+
 let currentRootVID = 1
 
 export default function addVID (vdom, id = null) {

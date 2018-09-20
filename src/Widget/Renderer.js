@@ -1,4 +1,9 @@
-import undisposed from 'litchy/lib/decorator/undisposed'
+/**
+ * VDOM渲染器
+ *
+ * @author Y3G
+ */
+
 import vdom from '../vdom/vdom'
 
 const { assign } = Object
@@ -31,14 +36,14 @@ export default superclass => class Renderer extends superclass {
     this.data_ = assign({}, this.defaultData, myData)
   }
 
-  @undisposed
+  // public
   update (data) {
     if (this.updateData(data)) {
+      this.beforeUpdate()
       this.updateToBackend()
     }
   }
 
-  @undisposed
   updateData (data) {
     const newData = assign({}, this.data, data)
     const oldData = this.data
@@ -49,13 +54,11 @@ export default superclass => class Renderer extends superclass {
     return shouldRender
   }
 
-  @undisposed
   updateToBackend () {
     const vdom = this.renderVDOM()
     this.commit(vdom)
   }
 
-  @undisposed
   renderVDOM () {
     const rawVDOM = polyfillNull(this.render())
     const retVDOM = vdom(rawVDOM, this)

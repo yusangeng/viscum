@@ -1,11 +1,12 @@
-import mix from 'litchy/lib/mix'
-import Eventable from 'litchy/lib/Eventable'
-import undisposed from 'litchy/lib/decorator/undisposed'
+/**
+ * DOM渲染器
+ *
+ * @author Y3G
+ */
+
 import Delegate from '../utils/Delegate'
 import commit from '../dom/commit'
 import selectorToElement from '../utils/selectorToElement'
-
-const MyDelegate = mix(Eventable).with(Delegate)
 
 export default superclass => class DOMBackend extends superclass {
   get wrap () {
@@ -55,20 +56,12 @@ export default superclass => class DOMBackend extends superclass {
     super.dispose()
   }
 
-  @undisposed
+  // public
   mount (el) {
+    if (this.disposed) throw new Error(`Widget has been disposed.`)
+    if (this.mounted) throw new Error(`Widget has been mounted.`)
+
     el = selectorToElement(el)
-
-    if (this.disposed) {
-      console.warn(`组件已经被释放, 不可执行mount流程.`)
-      return
-    }
-
-    if (this.mounted) {
-      console.warn(`组件已经被mount到DOM上.`)
-      return
-    }
-
     const vdom = this.renderVDOM()
     const { shareMode } = this
     let wrap
@@ -90,8 +83,7 @@ export default superclass => class DOMBackend extends superclass {
     this.el_ = el
 
     if (!this.delegator) {
-      this.delegator_ = new MyDelegate()
-      this.delegator.initDelegate(this.wrap)
+      this.delegator_ = new Delegate(this.wrap)
       this.afterDelegatorCreated(this.delegator)
     }
 
@@ -108,8 +100,11 @@ export default superclass => class DOMBackend extends superclass {
     this.afterMount()
   }
 
-  @undisposed
+  // public
   unmount () {
+    if (this.disposed) throw new Error(`Widget has been disposed.`)
+    if (!this.mounted) throw new Error(`Widget has NOT been mounted.`)
+
     const { wrap, el } = this
 
     this.beforeUnmount()
@@ -129,7 +124,6 @@ export default superclass => class DOMBackend extends superclass {
     this.mounted_ = false
   }
 
-  @undisposed
   on$ (type, sel, callback) {
     const { delegator, parentDelegator } = this
     let d = null

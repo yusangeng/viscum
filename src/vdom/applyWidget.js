@@ -1,3 +1,9 @@
+/**
+ * VDOM展开
+ *
+ * @author Y3G
+ */
+
 import renderWidget from './renderWidget'
 
 export default function applyWidget (vdom, parentWidget) {

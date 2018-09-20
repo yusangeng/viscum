@@ -1,3 +1,9 @@
+/**
+ * 创建VDOM节点
+ *
+ * @author Y3G
+ */
+
 import { TEXT_TAG_NAME } from '../dom/const'
 
 const { isArray } = Array
